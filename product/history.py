@@ -6,21 +6,21 @@ class History(object):
 
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get(settings.HISTORY_SESSION_ID)
-        if not cart:
-            cart = self.session[settings.HISTORY_SESSION_ID] = {}
-        self.cart = cart
+        favorites = self.session.get(settings.HISTORY_SESSION_ID)
+        if not favorites:
+            favorites = self.session[settings.HISTORY_SESSION_ID] = {}
+        self.favorites = favorites
 
     def add(self, product):
         product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
+        if product_id not in self.favorites:
+            self.favorites[product_id] = {'quantity': 0, 'price': str(product.price)}
 
 
     def remove(self, product):
         product_id = str(product.id)
-        if product_id in self.cart:
-            del self.cart[product_id]
+        if product_id in self.favorites:
+            del self.favorites[product_id]
             self.save()
 
     def clear(self):
@@ -28,13 +28,13 @@ class History(object):
         self.session.modified = True
 
     def save(self):
-        self.session[settings.HISTORY_SESSION_ID] = self.cart
+        self.session[settings.HISTORY_SESSION_ID] = self.favorites
         self.session.modified = True
 
     def __iter__(self):
-        product_ids = self.cart.keys()
+        product_ids = self.favorites.keys()
         products = Product.objects.filter(id__in=product_ids)
         for product in products:
-            self.cart[str(product.id)]['product'] = product
+            self.favorites[str(product.id)]['product'] = product
 
 
