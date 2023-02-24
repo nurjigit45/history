@@ -115,7 +115,7 @@ MEDIA_ROOT = (BASE_DIR, 'media')
 
 SESSION_SAVE_EVERY_REQUEST = True
 
-HISTORY_SESSION_ID = 'history'
+HISTORY_SESSION_ID = 'favorites'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
